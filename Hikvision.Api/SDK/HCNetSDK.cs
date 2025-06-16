@@ -16,6 +16,8 @@ public static class HCNetSDK
         ref NET_DVR_DEVICEINFO_V30 lpDeviceInfo);
     [DllImport(DllName)] internal static extern bool NET_DVR_Logout(int lUserID);
     [DllImport(DllName)] internal static extern int NET_DVR_GetLastError();
+    //TODO: add declarations for SDK user management functions
+    // e.g. NET_DVR_SetUserInfo, NET_DVR_GetUserInfo
 
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
     internal struct NET_DVR_DEVICEINFO_V30

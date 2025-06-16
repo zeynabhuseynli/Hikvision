@@ -1,4 +1,5 @@
-﻿using Hikvision.Api.SDK;
+﻿using Hikvision.Api.Models;
+using Hikvision.Api.SDK;
 
 namespace Hikvision.Api.Services;
 public class HikvisionAccessControlClient : IHikvisionAccessControlClient
@@ -43,6 +44,31 @@ public class HikvisionAccessControlClient : IHikvisionAccessControlClient
     }
 
     public int GetLastError() => HCNetSDK.NET_DVR_GetLastError();
+
+    public IEnumerable<UserDto> GetUsers()
+    {
+        if (_userId < 0)
+            throw new InvalidOperationException("Not connected.");
+        // TODO: call actual HCNetSDK user query methods; stubbed list for example
+        return new List<UserDto>
+        {
+            new UserDto { Id = 1, Username = "operator", Role = "Operator" },
+            new UserDto { Id = 2, Username = "admin", Role = "Admin" }
+        };
+    }
+
+    public void CreateUser(string username, string password, string role)
+    {
+        if (_userId < 0)
+            throw new InvalidOperationException("Not connected.");
+        // TODO: invoke HCNetSDK.NET_DVR_SetUserInfo or similar
+        var success = true; // replace with actual SDK call result
+        if (!success)
+        {
+            var err = HCNetSDK.NET_DVR_GetLastError();
+            throw new InvalidOperationException($"Create user failed with code {err}.");
+        }
+    }
 
     public void Dispose()
     {
