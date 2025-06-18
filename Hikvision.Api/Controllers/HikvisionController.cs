@@ -2,67 +2,21 @@
 using Hikvision.Api.Services;
 using Microsoft.AspNetCore.Mvc;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace Hikvision.Api.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 public class HikvisionController : ControllerBase
 {
-    private readonly IHikvisionAccessControlClient _client;
-
-    public HikvisionController(IHikvisionAccessControlClient client)
+    private readonly IHikvisionService _hikvisionService;
+    public HikvisionController(IHikvisionService hikvisionService)
     {
-        _client = client;
+        _hikvisionService = hikvisionService;
     }
 
+    // Cihaza bağlan
     [HttpPost("connect")]
-    public IActionResult Connect([FromBody] ConnectRequest request)
+    public ActionResult<ApiResponse<object>> Connect(ConnectRequest request)
     {
-        try
-        {
-            _client.Initialize();
-            _client.Connect(request.Ip, request.Port, request.Username, request.Password);
-            return Ok(new { message = "Connected" });
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(new ErrorResponse { Error = ex.Message, Code = _client.GetLastError() });
-        }
-    }
-
-    [HttpPost("disconnect")]
-    public IActionResult Disconnect()
-    {
-        _client.Disconnect();
-        return Ok(new { message = "Disconnected" });
-    }
-
-    [HttpGet("users")]
-    public IActionResult GetUsers()
-    {
-        try
-        {
-            var users = _client.GetUsers();
-            return Ok(users);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(new ErrorResponse { Error = ex.Message, Code = _client.GetLastError() });
-        }
-    }
-
-    [HttpPost("users")]
-    public IActionResult CreateUser([FromBody] CreateUserRequest request)
-    {
-        try
-        {
-            _client.CreateUser(request.Username, request.Password, request.Role);
-            return Ok(new { message = "User created" });
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(new ErrorResponse { Error = ex.Message, Code = _client.GetLastError() });
-        }
+        return _hikvisionService.HikConnection(request);
     }
 }
