@@ -3,11 +3,9 @@ using Hikvision.Api.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddSingleton<IHikvisionService,HikvisionService>();
-
+builder.Services.AddSingleton<IHikvisionService, HikvisionService>();
 
 var app = builder.Build();
 
@@ -18,9 +16,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();
